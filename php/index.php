@@ -3,11 +3,8 @@ include_once '../lib.php';
 View::header('Distribuciones latosas');
 View::navigation();
 
-$db = new PDO("sqlite:../datos.db");
-$db->exec('PRAGMA foreign_keys = ON;'); //Activa la integridad referencial para esta conexión
-//$db1 = DB::get();
-$res=$db->prepare('SELECT * FROM bebidas;');
-$res->execute();
+$db = new DB();
+$res = $db->execute_query("SELECT * FROM bebidas;");
 
 //Pruebas
 echo "<h2>" . "EPOCH: " . time() . "</h2>";

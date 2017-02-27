@@ -37,25 +37,27 @@ NAV;
 
 class DB{
     private static $connection=null;
-    public static function get(){
-        if(self::$connection === null){
-            self::$connection = $db = new PDO("sqlite:./datos.db");
-            self::$connection->exec('PRAGMA foreign_keys = ON;');
-            self::$connection->exec('PRAGMA encoding="UTF-8";');
+
+    public function __construct(){
+        $this->connect();
+    }
+
+    private function connect(){
+        if(self::$connection === null) {
+            self::$connection = new PDO("sqlite:../datos.db");
+            self::$connection->exec("PRAGMA foreign_keys = ON;");
+            self::$connection->exec("PRAGMA encoding='UTF-8';");
             self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
-        return self::$connection;
     }
-    public function execute_sql($sql,$parms=null){
-        try {
-            $db = $this->get();
-            $ints= $db->prepare ( $sql );
-            if ($ints->execute($parms)) {
-                return $ints;
-            }
-        }
-        catch (PDOException $e) {
-            echo '<h1>Error en la base de datos: ' . $e->getMessage() . '</h1>';
+
+    public function execute_query($query){
+        try{
+            $result = self::$connection->prepare("$query");
+            $result->execute();
+            return $result;
+        }catch (PDOException $e){
+            echo "<h1>ERROR EN LA BASE DE DATOS</h1>";
         }
         return "";
     }
