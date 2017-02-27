@@ -1,0 +1,150 @@
+/* Header */
+header {
+    text-align: center;
+    background-color: #07889B;
+    border-radius: 15px;
+    margin: 20px;
+    padding: 10px;
+}
+header h1 img {
+    vertical-align: middle;
+}
+
+/* Barra de navegación */
+nav > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #EEAA7B;
+}
+nav > ul li {
+    float: left;
+}
+nav > ul li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+nav > ul li a:hover:not(.active) {
+    background-color: #07889B;
+}
+nav > ul li a.active {
+    background-color: #E37222;
+}
+
+/* Body */
+body {
+    background-color: #66B9BF;
+    display: block;
+}
+
+/* Footer */
+footer {
+    border: 5px none;
+    color: white;
+    background-color: #07889B;
+    text-align: center;
+    height: 50px;
+    width: 100%;
+    padding: 15px;
+}
+
+/* -------- Extras ------- */
+/* Paneles */
+.panel{
+    border: 2px solid;
+    border-radius: 15px 50px;
+    background-color: #EEAA7B;
+    width: auto;
+    float: left;
+    margin: 20px;
+    padding: 20px;
+}
+
+/* Productos */
+.producto img, table {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Clearfix */
+.clearfix {
+    clear: both;
+}
+
+/* Tabla de productos */
+#tablaProductos {
+    margin: 20px;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+#tablaProductos th {
+    border: none;
+    color: #333;
+    background-color: #E37222;
+    padding: 10px;
+    text-align: left;
+    text-shadow: 1px 1px 1px #ccc;
+}
+#tablaProductos td {
+    border: none;
+    border-top: solid 1px #957030;
+    color: #333;
+    background-color: #EEAA7B;
+    padding: 10px;
+    text-shadow: 1px 1px 1px #fff;
+}
+#tablaProductos th:first-child {
+    border-radius: 10px 0 0 0;
+}
+#tablaProductos th:last-child {
+    border-radius: 0 10px 0 0;
+}
+#tablaProductos tr:last-child td:first-child {
+    border-radius: 0 0 0 10px;
+}
+#tablaProductos tr:last-child td:last-child {
+    border-radius: 0 0 10px 0;
+}
+
+/* Tablas informativas */
+.tablaInformativa {
+    margin: 15px;
+    border-spacing: 2px;
+    font: normal 13px Arial, sans-serif;
+}
+.tablaInformativa th {
+    border: none;
+    color: #333;
+    padding: 10px;
+    text-align: left;
+    text-shadow: 1px 1px 1px #ccc;
+}
+.tablaInformativa td {
+    border: none;
+    color: #333;
+    padding: 10px;
+    text-align: center;
+    text-shadow: 1px 1px 1px #fff;
+}
+.tablaInformativa tr:nth-child(odd) th, tr:nth-child(odd) td {
+    background-color: #07889B;
+}
+.tablaInformativa tr:nth-child(even) th, tr:nth-child(even) td {
+    background-color: #66B9BF;
+}
+.tablaInformativa tr:first-of-type th {
+    border-radius: 20px 0 0 0;
+}
+.tablaInformativa tr:last-of-type th {
+    border-radius: 0 0 0 20px;
+}
+.tablaInformativa tr:first-of-type td {
+    border-radius: 0 20px 0 0;
+}
+.tablaInformativa tr:last-of-type td {
+    border-radius: 0 0 20px 0;
+}
