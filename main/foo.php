@@ -1,23 +1,24 @@
 <?php
 include_once '../lib.php';
-View::header('Distribuciones latosas');
+View::start('Distribuciones latosas');
 View::navigation();
+User::login($_POST['uname'], $_POST['psw']);
 
 $db = new DB();
-$res = $db->execute_query("SELECT * FROM bebidas;");
+$result = $db->execute_query("SELECT * FROM bebidas;");
 
 //Pruebas
 echo "<h2>" . "EPOCH: " . time() . "</h2>";
 echo "<h3>" . "Human: " . date("Y-m-d H:i:s", time()) . "</h2>";
 
 //Ejemplo de lectura de tabla
-if($res){
+if ($result) {
     echo '<h2>Ejemplo acceso a tabla</h2>';
-    $res->setFetchMode(PDO::FETCH_NAMED);
+    $result->setFetchMode(PDO::FETCH_NAMED);
     $first=true;
     // Todo equivale a $res
     //$todo = $res->fetchAll();
-    foreach($res as $bebida){
+    foreach ($result as $bebida) {
         if($first){
             echo "<table><tr>";
             foreach($bebida as $field=>$value){

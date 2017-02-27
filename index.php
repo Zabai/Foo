@@ -1,3 +1,3 @@
 <?php
 //echo phpinfo();
-header('Location: php/index.php');
+header('Location: main/index.php');
