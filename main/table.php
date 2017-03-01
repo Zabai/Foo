@@ -27,8 +27,8 @@ if ($result) {
         $index = 1;
         foreach ($bebida as $value) {
             if ($index === 2) {
-                $file = strtolower(str_replace(" ", "-", $value));
-                echo "<td><a href=../main/product.php?product=$file>$value</a></td>";
+                $product = strtolower(str_replace(" ", "-", $value));
+                echo "<td><a href=../main/product.php?product=$product>$value</a></td>";
             } else echo "<td>$value</td>";
             $index++;
         }

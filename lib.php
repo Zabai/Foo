@@ -21,19 +21,20 @@ HEADER;
     }
 
     public static function navigation(){
-        $tag = "active";
-        if (!User::getLoggedUser()) $log = "<li style='float: right'><a href='../account/login.php'>Identificarse</a></li>";
-        else $log = "<li style='float: right'><a href='../account/account.php'>Mi cuenta</a></li>";
-        echo <<<NAV
-        <nav>
-            <ul>
-                <li><a href="../main/index.php" class=$tag>Inicio</a></li>
-                <li><a href="../main/table.php">Productos</a></li>
-                <li><a href="../main/contact.php">Contacto</a></li>
-                $log
-            </ul>
-        </nav>
-NAV;
+        echo "<nav><ul>";
+
+        $files = array("index", "table", "contact");
+        $navItems['index'] = "Inicio";
+        $navItems['table'] = "Productos";
+        $navItems['contact'] = "Contacto";
+
+        foreach ($files as $item) {
+            if (basename($_SERVER['PHP_SELF'], ".php") == $item)
+                echo "<li><a href='../main/$item.php' class='active'>$navItems[$item]</a></li>";
+            else
+                echo "<li><a href='../main/$item.php'>$navItems[$item]</a></li>";
+        }
+        echo "</ul></nav>";
     }
 
     public static function productTable($name)
