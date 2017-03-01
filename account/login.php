@@ -12,5 +12,4 @@ echo <<<CONTENT
     <input id="submit" class="submit" type="submit" value="Identificarse">
 </form>
 CONTENT;
-User::login($_POST['user'], $_POST['password']);
 View::end();

@@ -13,6 +13,7 @@ if ($result) {
     $tableHead["marca"] = "Nombre del producto";
     $tableHead["stock"] = "Stock";
     $tableHead["PVP"] = "Precio";
+
     foreach ($result as $bebida) {
         if ($first) {
             echo "<table id='tablaProductos'><tr>";
@@ -27,7 +28,7 @@ if ($result) {
         foreach ($bebida as $value) {
             if ($index === 2) {
                 $file = strtolower(str_replace(" ", "-", $value));
-                echo "<td><a href=../products/$file.php>$value</a></td>";
+                echo "<td><a href=../main/product.php?product=$file>$value</a></td>";
             } else echo "<td>$value</td>";
             $index++;
         }
