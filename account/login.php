@@ -1,15 +1,22 @@
 <?php
-include_once '../lib.php';
+include_once '../lib/lib.php';
 View::start('Distribuciones latosas');
 View::navigation();
 
 echo <<<CONTENT
-<form id="login" method="post" action=''>
-    <p>Usuario:</p>
-    <input id="user" type="text" name="user"><br>
-    <p>Clave:</p>
-    <input id="pass" type="password" name="password"><br><br>
-    <input id="submit" class="submit" type="submit" value="Identificarse">
-</form>
+<div class="panel">
+    <form id="login" method="post" action='../account/action.php?op=login'>
+        <p>Usuario:</p>
+        <input type="text" name="user"><br>
+        <p>Contraseña:</p>
+        <input type="password" name="password"><br><br>
+        <div style="text-align: center">
+        <input type="submit" value="Identificarse">
+        </div>
+    </form>
+</div>
+
+<div class="clearfix"></div>
 CONTENT;
+
 View::end();

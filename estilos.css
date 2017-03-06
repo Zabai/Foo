@@ -76,12 +76,13 @@ footer {
 }
 
 /* Tabla de productos */
-#tablaProductos {
+.tablaHorizontal {
     margin: 20px;
     border-spacing: 0;
     font: normal 13px Arial, sans-serif;
 }
-#tablaProductos th {
+
+.tablaHorizontal th {
     border: none;
     color: #333;
     background-color: #E37222;
@@ -89,7 +90,8 @@ footer {
     text-align: left;
     text-shadow: 1px 1px 1px #ccc;
 }
-#tablaProductos td {
+
+.tablaHorizontal td {
     border: none;
     border-top: solid 1px #957030;
     color: #333;
@@ -97,54 +99,70 @@ footer {
     padding: 10px;
     text-shadow: 1px 1px 1px #fff;
 }
-#tablaProductos th:first-child {
+
+.tablaHorizontal th:first-child {
     border-radius: 10px 0 0 0;
 }
-#tablaProductos th:last-child {
+
+.tablaHorizontal th:last-child {
     border-radius: 0 10px 0 0;
 }
-#tablaProductos tr:last-child td:first-child {
+
+.tablaHorizontal tr:last-child td:first-child {
     border-radius: 0 0 0 10px;
 }
-#tablaProductos tr:last-child td:last-child {
+
+.tablaHorizontal tr:last-child td:last-child {
     border-radius: 0 0 10px 0;
 }
 
 /* Tablas informativas */
-.tablaInformativa {
+.tablaVertical {
     margin: 15px;
     border-spacing: 2px;
     font: normal 13px Arial, sans-serif;
 }
-.tablaInformativa th {
+
+.tablaVertical th {
     border: none;
     color: #333;
     padding: 10px;
     text-align: left;
     text-shadow: 1px 1px 1px #ccc;
 }
-.tablaInformativa td {
+
+.tablaVertical td {
     border: none;
     color: #333;
     padding: 10px;
     text-align: center;
     text-shadow: 1px 1px 1px #fff;
 }
-.tablaInformativa tr:nth-child(odd) th, tr:nth-child(odd) td {
+
+.tablaVertical tr:nth-child(odd) th, .tablaVertical tr:nth-child(odd) td {
     background-color: #07889B;
 }
-.tablaInformativa tr:nth-child(even) th, tr:nth-child(even) td {
+
+.tablaVertical tr:nth-child(even) th, .tablaVertical tr:nth-child(even) td {
     background-color: #66B9BF;
 }
-.tablaInformativa tr:first-of-type th {
+
+.tablaVertical tr:first-of-type th {
     border-radius: 20px 0 0 0;
 }
-.tablaInformativa tr:last-of-type th {
+
+.tablaVertical tr:last-of-type th {
     border-radius: 0 0 0 20px;
 }
-.tablaInformativa tr:first-of-type td {
+
+.tablaVertical tr:first-of-type td {
     border-radius: 0 20px 0 0;
 }
-.tablaInformativa tr:last-of-type td {
+
+.tablaVertical tr:last-of-type td {
     border-radius: 0 0 20px 0;
+}
+
+#login {
+    text-align: center;
 }

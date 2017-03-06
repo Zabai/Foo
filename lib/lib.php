@@ -23,17 +23,24 @@ HEADER;
     public static function navigation(){
         echo "<nav><ul>";
 
-        $files = array("index", "table", "contact");
+        $files = (User::getLoggedUser() ? array("index", "table", "contact") : array("index", "contact"));
         $navItems['index'] = "Inicio";
         $navItems['table'] = "Productos";
         $navItems['contact'] = "Contacto";
 
         foreach ($files as $item) {
             if (basename($_SERVER['PHP_SELF'], ".php") == $item)
-                echo "<li><a href='../main/$item.php' class='active'>$navItems[$item]</a></li>";
+                echo "<li><a href=../main/$item.php class=active>$navItems[$item]</a></li>";
             else
-                echo "<li><a href='../main/$item.php'>$navItems[$item]</a></li>";
+                echo "<li><a href=../main/$item.php>$navItems[$item]</a></li>";
         }
+
+        if (User::getLoggedUser())
+            echo "<li style='float: right'><a href='../account/account.php'>Mi cuenta</a></li>
+                <li style='float: right'><a href=../account/action.php?op=logout>Salir</a></li>";
+        else
+            echo "<li style='float: right'><a href='../account/login.php'>Identificarse</a></li>";
+
         echo "</ul></nav>";
     }
 
@@ -54,7 +61,7 @@ HEADER;
         <div class="panel producto">
             <h3>$info[1]</h3>
             <img src="../images/products/$info[1].jpg" alt="Lata">
-            <table class="tablaInformativa">
+            <table class="tablaVertical">
                 <tr>
                     <th>Nombre:</th>
                     <td>$info[1]</td>
@@ -123,20 +130,20 @@ class DB{
         }
     }
 
-    public function execute_query($query){
+    public function execute_query($query, $parameters = null)
+    {
         try{
             $result = self::$connection->prepare("$query");
-            $result->execute();
+            $result->execute($parameters);
             return $result;
         }catch (PDOException $e){
-            echo "<h1>ERROR EN LA BASE DE DATOS</h1>";
+            echo '<h1>Error en la base de datos: ' . $e->getMessage() . '</h1>';
         }
         return "";
     }
 }
 
 class User{
-    // COMPROBAR REFACTOR
     public static function session_start(){
         if(session_status () === PHP_SESSION_NONE){
             session_start();
@@ -153,13 +160,8 @@ class User{
     {
         self::session_start();
 
-        $db = new PDO("sqlite:../datos.db");
-        $db->exec("PRAGMA foreign_keys = ON;");
-        $db->exec("PRAGMA encoding='UTF-8';");
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $instance = $db->prepare("SELECT * FROM usuarios WHERE usuario=? and clave=?");
-        $instance->execute(array($user, md5($password)));
+        $db = new DB();
+        $instance = $db->execute_query("SELECT * FROM usuarios WHERE usuario=? and clave=?", array($user, md5($password)));
         $instance->setFetchMode(PDO::FETCH_NAMED);
 
         $res = $instance->fetchAll();

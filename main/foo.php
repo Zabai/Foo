@@ -1,5 +1,5 @@
 <?php
-include_once '../lib.php';
+include_once '../lib/lib.php';
 View::start('Distribuciones latosas');
 View::navigation();
 User::login($_POST['uname'], $_POST['psw']);
