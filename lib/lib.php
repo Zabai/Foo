@@ -23,7 +23,7 @@ HEADER;
     public static function navigation(){
         echo "<nav><ul>";
 
-        $files = (User::getLoggedUser() ? array("index", "table", "contact") : array("index", "contact"));
+        $files = ((User::getLoggedUser()['tipo'] == 2) ? array("index", "table", "contact") : array("index", "contact"));
         $navItems['index'] = "Inicio";
         $navItems['table'] = "Productos";
         $navItems['contact'] = "Contacto";

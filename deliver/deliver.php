@@ -2,7 +2,7 @@
 include_once '../lib/lib.php';
 include_once '../lib/deliver-tools.php';
 
-//if(User::getLoggedUser()['tipo'] != 3) header("Location: ../main/index.php");
+if (User::getLoggedUser()['tipo'] != 3) header("Location: ../main/index.php");
 
 deliver_operation();
 
@@ -11,7 +11,7 @@ View::navigation();
 
 echo "<h2>Pedidos asignados</h2>";
 $db = new DB();
-$result = $db->execute_query("SELECT * FROM pedidos WHERE idrepartidor=?;", array(User::getLoggedUser()['id']));
+$result = $db->execute_query("SELECT * FROM pedidos WHERE idrepartidor=? AND horaentrega=?;", array(User::getLoggedUser()['id'], 0));
 
 if ($result) {
     $result->setFetchMode(PDO::FETCH_NAMED);
@@ -19,10 +19,10 @@ if ($result) {
 
     $head = tableDictionary();
 
-    foreach ($result as $pedido) {
+    foreach ($result as $order) {
         if ($first) {
             echo "<table class='tablaHorizontal'><tr>";
-            foreach ($pedido as $field => $value) {
+            foreach ($order as $field => $value) {
                 echo "<th>$head[$field]</th>";
             }
             echo "<th>Acciones</th>";
@@ -32,15 +32,15 @@ if ($result) {
 
         echo "<tr>";
         $index = 1;
-        foreach ($pedido as $value) {
+        foreach ($order as $value) {
             if ($index === 5 || $index === 7 || $index === 8 || $index === 9)
                 echo "<td>" . date("Y-m-d H:i:s", $value) . "</td>";
             else
                 echo "<td>$value</td>";
             $index++;
         }
-        if ($pedido['horareparto'] == 0) echo "<td><a href='../deliver/deliver.php?op=deli&id=$pedido[id]'>En reparto</a></td>";
-        else echo "<td><a href='../deliver/deliver.php?op=fini&id=$pedido[id]'>Entregado</a></td>";
+        if ($order['horareparto'] == 0) echo "<td><a href='../deliver/deliver.php?op=deli&id=$order[id]'>En reparto</a></td>";
+        else echo "<td><a href='../deliver/deliver.php?op=fini&id=$order[id]'>Entregado</a></td>";
         echo "</tr>";
     }
     echo "</table>";
@@ -53,10 +53,10 @@ if ($result) {
     $result->setFetchMode(PDO::FETCH_NAMED);
     $first = true;
 
-    foreach ($result as $pedido) {
+    foreach ($result as $order) {
         if ($first) {
             echo "<table class='tablaHorizontal'><tr>";
-            foreach ($pedido as $field => $value) {
+            foreach ($order as $field => $value) {
                 echo "<th>$head[$field]</th>";
             }
             echo "<th>Acciones</th>";
@@ -66,12 +66,12 @@ if ($result) {
 
         echo "<tr>";
         $index = 1;
-        foreach ($pedido as $value) {
+        foreach ($order as $value) {
             if ($index === 5) echo "<td>" . date("Y-m-d H:i:s", $value) . "</td>";
             else echo "<td>$value</td>";
             $index++;
         }
-        echo "<td><a href='../deliver/deliver.php?op=asig&id=$pedido[id]'>Asignar</a></td>";
+        echo "<td><a href='../deliver/deliver.php?op=asig&id=$order[id]'>Asignar</a></td>";
         echo "</tr>";
     }
     echo "</table>";

@@ -1,6 +1,6 @@
 <?php
 include_once '../lib/lib.php';
-if (!User::getLoggedUser()) header("Location: ../main/index.php");
+if (!User::getLoggedUser()) header("Location: ../account/login.php");
 
 switch (User::getLoggedUser()['tipo']) {
     case 1:

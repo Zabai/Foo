@@ -10,4 +10,4 @@ switch ($_GET['op']) {
         break;
 }
 
-header("Location: ../main/index.php");
+header("Location: ../account/account.php");
