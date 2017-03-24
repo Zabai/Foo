@@ -3,50 +3,13 @@ include_once '../lib/lib.php';
 include_once '../lib/deliver-tools.php';
 
 if (User::getLoggedUser()['tipo'] != 3) header("Location: ../main/index.php");
-
 deliver_operation();
 
 View::start('Distribuciones latosas');
 View::navigation();
 
-echo "<h2>Pedidos asignados</h2>";
-$db = new DB();
-$result = $db->execute_query("SELECT * FROM pedidos WHERE idrepartidor=? AND horaentrega=?;", array(User::getLoggedUser()['id'], 0));
-
-if ($result) {
-    $result->setFetchMode(PDO::FETCH_NAMED);
-    $first = true;
-
-    $head = tableDictionary();
-
-    foreach ($result as $order) {
-        if ($first) {
-            echo "<table class='tablaHorizontal'><tr>";
-            foreach ($order as $field => $value) {
-                echo "<th>$head[$field]</th>";
-            }
-            echo "<th>Acciones</th>";
-            $first = false;
-            echo "</tr>";
-        }
-
-        echo "<tr>";
-        $index = 1;
-        foreach ($order as $value) {
-            if ($index === 5 || $index === 7 || $index === 8 || $index === 9)
-                echo "<td>" . date("Y-m-d H:i:s", $value) . "</td>";
-            else
-                echo "<td>$value</td>";
-            $index++;
-        }
-        if ($order['horareparto'] == 0) echo "<td><a href='../deliver/deliver.php?op=deli&id=$order[id]'>En reparto</a></td>";
-        else echo "<td><a href='../deliver/deliver.php?op=fini&id=$order[id]'>Entregado</a></td>";
-        echo "</tr>";
-    }
-    echo "</table>";
-}
-
 echo "<h2>Pedidos sin asignar</h2>";
+$db = new DB();
 $result = $db->execute_query("SELECT * FROM pedidos WHERE idrepartidor IS NULL;");
 
 if ($result) {
@@ -55,42 +18,148 @@ if ($result) {
 
     foreach ($result as $order) {
         if ($first) {
-            echo "<table class='tablaHorizontal'><tr>";
-            foreach ($order as $field => $value) {
-                echo "<th>$head[$field]</th>";
-            }
-            echo "<th>Acciones</th>";
+            echo <<<HEAD
+			<table class='tablaHorizontal'>
+				<tr>
+					<th>Cliente</th>
+					<th>Población</th>
+					<th>Dirección</th>
+					<th>Hora creación</th>
+					<th>Acciones</th>
+				</tr>
+HEAD;
             $first = false;
-            echo "</tr>";
         }
 
-        echo "<tr>";
-        $index = 1;
-        foreach ($order as $value) {
-            if ($index === 5) echo "<td>" . date("Y-m-d H:i:s", $value) . "</td>";
-            else echo "<td>$value</td>";
-            $index++;
-        }
-        echo "<td><a href='../deliver/deliver.php?op=asig&id=$order[id]'>Asignar</a></td>";
-        echo "</tr>";
+        $cDate = date("Y-m-d H:i:s", $order['horacreacion']);
+        echo <<<CONTENT
+		<tr>
+			<td>{$order['idcliente']}</td>
+			<td>{$order['poblacionentrega']}</td>
+			<td>{$order['direccionentrega']}</td>
+			<td>{$cDate}</td>
+			<td><a href='../deliver/deliver.php?op=asig&id={$order['id']}'>Asignar</a></td>
+		</tr>
+CONTENT;
     }
-    echo "</table>";
+    echo "</table><hr>";
+}
+
+
+echo "<h2>Pedidos asignados</h2>";
+$result = $db->execute_query("SELECT * FROM pedidos WHERE idrepartidor=? AND horareparto=?;", array(User::getLoggedUser()['id'], 0));
+
+if ($result) {
+    $result->setFetchMode(PDO::FETCH_NAMED);
+    $first = true;
+
+    foreach ($result as $order) {
+        if ($first) {
+            echo <<<HEAD
+			<table class='tablaHorizontal'>
+				<tr>
+					<th>Cliente</th>
+					<th>Población</th>
+					<th>Dirección</th>
+					<th>Hora creación</th>
+					<th>Hora asignación</th>
+					<th>Acciones</th>
+				</tr>
+HEAD;
+            $first = false;
+        }
+
+        $cDate = date("Y-m-d H:i:s", $order['horacreacion']);
+        $aDate = date("Y-m-d H:i:s", $order['horaasignacion']);
+        echo <<<CONTENT
+		<tr>
+			<td>{$order['idcliente']}</td>
+			<td>{$order['poblacionentrega']}</td>
+			<td>{$order['direccionentrega']}</td>
+			<td>{$cDate}</td>
+			<td>{$aDate}</td>
+			<td><a href='../deliver/deliver.php?op=deli&id={$order['id']}'>En reparto</a></td>
+		</tr>
+CONTENT;
+    }
+    echo "</table><hr>";
+}
+
+echo "<h2>Pedidos en reparto</h2>";
+$result = $db->execute_query("SELECT * FROM pedidos WHERE idrepartidor=? AND horareparto>? AND horaentrega=?;", array(User::getLoggedUser()['id'], 0, 0));
+
+if ($result) {
+    $result->setFetchMode(PDO::FETCH_NAMED);
+    $first = true;
+
+    foreach ($result as $order) {
+        if ($first) {
+            echo <<<HEAD
+			<table class='tablaHorizontal'>
+				<tr>
+					<th>Cliente</th>
+					<th>Población</th>
+					<th>Dirección</th>
+					<th>Hora creación</th>
+					<th>Hora reparto</th>
+					<th>Acciones</th>
+				</tr>
+HEAD;
+            $first = false;
+        }
+
+        $cDate = date("Y-m-d H:i:s", $order['horacreacion']);
+        $dDate = date("Y-m-d H:i:s", $order['horareparto']);
+        echo <<<CONTENT
+		<tr>
+			<td>{$order['idcliente']}</td>
+			<td>{$order['poblacionentrega']}</td>
+			<td>{$order['direccionentrega']}</td>
+			<td>{$cDate}</td>
+			<td>{$dDate}</td>
+			<td><a href='../deliver/deliver.php?op=fini&id={$order['id']}'>Entregado</a></td>
+		</tr>
+CONTENT;
+    }
+    echo "</table><hr>";
+}
+
+echo "<h2>Pedidos entregados</h2>";
+$db = new DB();
+$result = $db->execute_query("SELECT * FROM pedidos WHERE idrepartidor=? AND horaentrega>?;", array(User::getLoggedUser()['id'], 0));
+
+if ($result) {
+    $result->setFetchMode(PDO::FETCH_NAMED);
+    $first = true;
+
+    foreach ($result as $order) {
+        if ($first) {
+            echo <<<HEAD
+			<table class='tablaHorizontal'>
+				<tr>
+					<th>Cliente</th>
+					<th>Población</th>
+					<th>Dirección</th>
+					<th>Hora creación</th>
+					<th>Hora entrega</th>
+				</tr>
+HEAD;
+            $first = false;
+        }
+
+        $cDate = date("Y-m-d H:i:s", $order['horacreacion']);
+        $fDate = date("Y-m-d H:i:s", $order['horaentrega']);
+        echo <<<CONTENT
+		<tr>
+			<td>{$order['idcliente']}</td>
+			<td>{$order['poblacionentrega']}</td>
+			<td>{$order['direccionentrega']}</td>
+			<td>{$cDate}</td>
+			<td>{$fDate}</td>
+		</tr>
+CONTENT;
+    }
+    echo "</table><hr>";
 }
 
 View::end();
-
-function tableDictionary()
-{
-    $tableHead["id"] = "ID Pedido";
-    $tableHead["idcliente"] = "ID Cliente";
-    $tableHead["poblacionentrega"] = "Población Entrega";
-    $tableHead["direccionentrega"] = "Dirección entrega";
-    $tableHead["horacreacion"] = "Hora creación";
-    $tableHead["idrepartidor"] = "ID repartidor";
-    $tableHead["horaasignacion"] = "Hora asignación";
-    $tableHead["horareparto"] = "Hora reparto";
-    $tableHead["horaentrega"] = "Hora entrega";
-    $tableHead["PVP"] = "Precio";
-
-    return $tableHead;
-}
