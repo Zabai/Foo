@@ -9,31 +9,44 @@ View::navigation();
 
 echo "<h2>Mis pedidos</h2>";
 $db = new DB();
-$result = $db->execute_query("SELECT * FROM pedidos WHERE idcliente=?;", array(User::getLoggedUser()['id']));
+$result = $db->execute_query("SELECT p.horaentrega, p.horareparto, p.horaasignacion,p.id, p.idcliente, u.usuario, p.poblacionentrega, p.direccionentrega, p.horacreacion, p.pvp FROM pedidos as p join usuarios as u ON p.idcliente=? and u.id=p.idcliente;", array(User::getLoggedUser()['id']));
 
 if ($result) {
     $result->setFetchMode(PDO::FETCH_NAMED);
-    $first = true;
 
-    $head = tableDictionary();
-
+    echo <<<TABLEHEAD
+    <table class="tablaHorizontal">
+    <tr>
+        <th>Usuario</th>
+        <th>Poblacion entrega</th>
+        <th>Direccion entrega</th>
+        <th>Hora creacion</th>
+        <th>Precio</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+TABLEHEAD;
     foreach ($result as $order) {
-        if ($first) {
-            echo "<table class='tablaHorizontal'><tr>";
-            foreach ($order as $field => $value) {
-                echo "<th>$head[$field]</th>";
-            }
-            echo "<th>Acciones</th>";
-            $first = false;
-            echo "</tr>";
-        }
 
         echo "<tr>";
         $index = 1;
         foreach ($order as $value) {
-            if ($index === 5) echo "<td>" . date("Y-m-d H:i:s", $value) . "</td>";
-            else echo "<td>$value</td>";
-            $index++;
+            if ($index < 6) {
+                $index++;
+            } else {
+                if ($index === 9) echo "<td>" . date("Y-m-d H:i:s", $value) . "</td>";
+                else echo "<td>$value</td>";
+                $index++;
+            }
+        }
+        if (strcmp($order['horaentrega'], '0') != 0) {
+            echo "<td>Entregado</td>";
+        } elseif (strcmp($order['horareparto'], '0') != 0) {
+            echo "<td>En reparto</td>";
+        } elseif (strcmp($order['horaasignacion'], '') != 0) {
+            echo "<td>Asignado</td>";
+        } else {
+            echo "<td>Sin asignar</td>";
         }
         echo "<td><a href='../customer/order-details.php?id=$order[id]'>Ver detalles</a></td>";
         echo "</tr>";
@@ -42,19 +55,3 @@ if ($result) {
 }
 
 View::end();
-
-function tableDictionary()
-{
-    $tableHead["id"] = "ID Pedido";
-    $tableHead["idcliente"] = "ID Cliente";
-    $tableHead["poblacionentrega"] = "Población Entrega";
-    $tableHead["direccionentrega"] = "Dirección entrega";
-    $tableHead["horacreacion"] = "Hora creación";
-    $tableHead["idrepartidor"] = "ID repartidor";
-    $tableHead["horaasignacion"] = "Hora asignación";
-    $tableHead["horareparto"] = "Hora reparto";
-    $tableHead["horaentrega"] = "Hora entrega";
-    $tableHead["PVP"] = "Precio";
-
-    return $tableHead;
-}
