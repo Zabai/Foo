@@ -16,26 +16,26 @@ if ($res) {
         echo <<<MODIFY
         <div class="panel">
             <form id="login" method="post" action='../admin/modify-user.php'>
-                <input type="hidden" name="id" value=$user[id]>
+                <input type="hidden" name="id" value={$user['id']}>
                 
                 <p>Usuario:</p>
-                <input type="text" name="user" value=$user[usuario]><br>
+                <input type="text" name="user" value="{$user['usuario']}"><br>
                 
                 <p>Contraseña:</p>
-                <input type="password" name="password" value=$user[clave]><br>
-                <input type="hidden" name="oldPassword" value=$user[clave]>
+                <input type="password" name="password" value="{$user['clave']}"><br>
+                <input type="hidden" name="oldPassword" value="{$user['clave']}">
                 
                 <p>Nombre:</p>
-                <input type="text" name="name" value=$user[nombre]><br>
+                <input type="text" name="name" value="{$user['nombre']}"><br>
                 
                 <p>Tipo:</p>
-                <input type="text" name="type" value=$user[tipo]><br>
+                <input type="text" name="type" value="{$user['tipo']}"><br>
                 
                 <p>Población:</p>
-                <input type="text" name="town" value=$user[poblacion]><br>
+                <input type="text" name="town" value="{$user['poblacion']}"><br>
                 
                 <p>Dirección:</p>
-                <input type="text" name="direction" value=$user[direccion]><br><br>
+                <input type="text" name="direction" value="{$user['direccion']}"><br><br>
                 
                 <div style="text-align: center">
                 <input type="submit" value="Modificar Usuario">

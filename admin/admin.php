@@ -10,7 +10,7 @@ View::start('Distribuciones latosas');
 View::navigation();
 
 echo <<<NEWUSER
-<a href="../admin/create-user.php">Crear usuario</a>
+<div class=panel><a href="../admin/create-user.php">Crear usuario</a></div>
 <div class=clearfix></div>
 NEWUSER;
 

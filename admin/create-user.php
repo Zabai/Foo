@@ -4,6 +4,7 @@ include_once '../lib/admin-tools.php';
 
 if (User::getLoggedUser()['tipo'] != 1) header("Location: ../main/index.php");
 
+
 create_user();
 
 View::start('Distribuciones latosas');
@@ -22,7 +23,12 @@ echo <<<CREATE
         <input type="text" name="name"><br>
         
         <p>Tipo:</p>
-        <input type="text" name="type"><br>
+        <select name="type">
+                <option> Elige una opción </option>
+                <option value="1"," >Administrador</option>
+                <option value="3",>Repartidor</option>
+                <option value="2">Cliente</option>
+                </select>
         
         <p>Población:</p>
         <input type="text" name="town"><br>
@@ -44,7 +50,6 @@ View::end();
 function create_user()
 {
     if (!$_POST) return;
-
     createUser(array(
         $_POST['user'],
         md5($_POST['password']),
