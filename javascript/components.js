@@ -6,8 +6,7 @@ function show_create_order() {
         "<p>Dirección</p>" +
         "<input id='address' type='text'><br><br>" +
         "<button id='create_order' onclick='create_order()'>Crear pedido</button> " +
-        "</div>" +
-        "<div class='clearfix'></div>";
+        "</div>";
     $("#show_create_order").after(form);
     $("#show_create_order").remove();
 }

@@ -19,29 +19,23 @@ echo <<<TABLEHEAD
 TABLEHEAD;
 
 $db = new DB();
-$result = $db->execute_query("SELECT b.marca, l.unidades, l.PVP FROM bebidas as b join lineaspedido as l on l.idpedido=? and b.id=l.idbebida;", array($_GET['id']));
+$result = $db->execute_query("SELECT b.marca, l.unidades, l.PVP FROM bebidas as b 
+                                join lineaspedido as l on l.idpedido=? and b.id=l.idbebida;", array($_GET['id']));
 
 if ($result) {
-    $result->setFetchMode(PDO::FETCH_NUM);
+    $result->setFetchMode(PDO::FETCH_NAMED);
     foreach ($result as $line) {
-        $index = 1;
-        echo "<tr>";
-        foreach ($line as $value) {
-            echo "<td>$value</td>";
-            if ($index === 2) {
-                $unidades = $value;
-            }
-            if ($index === 3) {
-                $precio = $value;
-            }
-            $index++;
-        }
-        $total = $unidades * $precio;
-        echo "<td>$total</td>";
-
-        echo "</tr>";
+        $totalPrice = $line['unidades'] * $line['PVP'];
+        echo <<<CONTENT
+        <tr>
+            <td>{$line['marca']}</td>
+            <td>{$line['unidades']}</td>
+            <td>{$line['PVP']}</td>
+            <td>{$totalPrice}</td>
+        </tr>
+CONTENT;
     }
 }
-
 echo "</table>";
+
 View::end();

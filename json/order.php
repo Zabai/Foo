@@ -11,10 +11,13 @@ try {
         case "create":
             create_order($obj->town, $obj->address);
             break;
+        case "delete":
+            delete_line($obj->id);
+            break;
         default:
             break;
     }
-    $result->message = "Satisfactorio";
+    $result->message = "AJAX CORRECTO";
 } catch (Exception $e) {
     $result->message = $e->getMessage(); //En caso de error se envia la información de error al navegador
 }
@@ -34,4 +37,9 @@ function create_line($id, $quantity)
 
 }
 
+function delete_line($id)
+{
+    $db = new DB();
+    $db->execute_query("DELETE FROM lineaspedido WHERE id=?", array($id));
+}
 ?>

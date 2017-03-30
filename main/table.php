@@ -9,13 +9,16 @@ View::navigation();
 
 echo "<script src='../javascript/components.js'></script>";
 echo "<script src='../json/actions.js'></script>";
-echo "<button id='show_create_order' onclick='show_create_order()'>Crear pedido</button>";
 
 $existOrder = exists_order();
-
 if ($existOrder) {
     view_product_table();
+    echo "<button id='create_line' onclick='create_line()'>Añadir al pedido</button>";
     view_cart_table();
+    echo "<button id='finish_order' onclick='finish_order()'>Terminar pedido</button>";
+    echo "<div class='clearfix'></div>";
+} else {
+    echo "<button id='show_create_order' onclick='show_create_order()'>Empezar pedido</button>";
 }
 
 View::end();
@@ -30,11 +33,6 @@ function view_product_table()
     if ($result) {
         $result->setFetchMode(PDO::FETCH_NAMED);
         $first = true;
-
-        $tableHead["id"] = "ID";
-        $tableHead["marca"] = "Nombre del producto";
-        $tableHead["stock"] = "Stock";
-        $tableHead["PVP"] = "Precio";
 
         foreach ($result as $drink) {
             if ($first) {
@@ -68,5 +66,35 @@ BODY;
 function view_cart_table()
 {
     $db = new DB();
-    $result = $db->execute_query("SELECT * FROM lineaspedido WHERE ");
+    $result = $db->execute_query("SELECT * FROM lineaspedido 
+                                    WHERE idpedido=(SELECT id FROM pedidos WHERE idcliente=? AND horacreacion=?)",
+        array(User::getLoggedUser()['id'], 0));
+
+    if ($result) {
+        $result->setFetchMode(PDO::FETCH_NAMED);
+
+        echo <<<HEAD
+        <table class="tablaHorizontal">
+            <tr>
+                <th>Bebida</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+                <th>Acciones</th>
+            </tr>
+HEAD;
+        foreach ($result as $line) {
+            $totalPrice = $line['PVP'] * $line['unidades'];
+            echo <<<BODY
+            <tr id="linea{$line['id']}">
+                <td>{$line['idbebida']}</td>
+                <td>{$line['PVP']}</td>
+                <td>{$line['unidades']}</td>
+                <td>{$totalPrice}</td>
+                <td><button id="delete_line" onclick="delete_line({$line['id']})">Eliminar</button></td>
+            </tr>
+BODY;
+        }
+        echo "</table>";
+    }
 }

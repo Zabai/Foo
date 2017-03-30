@@ -43,11 +43,11 @@ TABLEHEAD;
             echo "<td>Entregado</td>";
         } elseif (strcmp($order['horareparto'], '0') != 0) {
             echo "<td>En reparto</td>";
-        } elseif (strcmp($order['horaasignacion'], '') != 0) {
+        } elseif (strcmp($order['horaasignacion'], '0') != 0) {
             echo "<td>Asignado</td>";
-        } else {
+        } else if (strcmp($order['horacreacion'], '0') != 0) {
             echo "<td>Sin asignar</td>";
-        }
+        } else echo "<td>Sin terminar</td>";
         echo "<td><a href='../customer/order-details.php?id=$order[id]'>Ver detalles</a></td>";
         echo "</tr>";
     }

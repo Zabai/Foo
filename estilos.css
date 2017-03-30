@@ -75,6 +75,18 @@ footer {
     clear: both;
 }
 
+/* Botones */
+button {
+    border: 2px solid #07889B;
+    border-radius: 15px;
+    background-color: #EEAA7B;
+}
+
+button:hover {
+    background-color: #E37222;
+    cursor: pointer;
+}
+
 /* Tabla de productos */
 .tablaHorizontal {
     margin: 20px;
