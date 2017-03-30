@@ -3,51 +3,70 @@ include_once '../lib/lib.php';
 include_once '../lib/customer-tools.php';
 
 if (!User::getLoggedUser()) header("Location: ../main/index.php");
-customer_operation();
 
 View::start('Distribuciones latosas');
 View::navigation();
 
-$db = new DB();
-$result = $db->execute_query("SELECT * FROM bebidas;");
+echo "<script src='../javascript/components.js'></script>";
+echo "<script src='../json/actions.js'></script>";
+echo "<button id='show_create_order' onclick='show_create_order()'>Crear pedido</button>";
 
-if ($result) {
-    $result->setFetchMode(PDO::FETCH_NAMED);
-    $first = true;
+$existOrder = exists_order();
 
-    $tableHead["id"] = "ID";
-    $tableHead["marca"] = "Nombre del producto";
-    $tableHead["stock"] = "Stock";
-    $tableHead["PVP"] = "Precio";
-
-    echo "<form method='post' action='../main/table.php?op=new'>";
-    foreach ($result as $drink) {
-        if ($first) {
-            echo "<table class='tablaHorizontal'><tr>";
-            foreach ($drink as $field => $value) {
-                echo "<th>$tableHead[$field]</th>";
-            }
-            echo "<th>Cantidad</th>";
-            $first = false;
-            echo "</tr>";
-        }
-        echo "<tr>";
-        $index = 1;
-        foreach ($drink as $value) {
-            if ($index === 2) {
-                $product = strtolower(str_replace(" ", "-", $value));
-                echo "<td><a href=../main/product.php?product=$product>$value</a></td>";
-            } else echo "<td>$value</td>";
-            $index++;
-        }
-        echo "<td><input type='number' name='amount[]' value=0>";
-        echo "<input type='hidden' name='id[]' value='$drink[id]'>";
-        echo "<input type='hidden' name='PVP[]' value='$drink[PVP]'>";
-        echo "</tr>";
-    }
-    echo '</table>';
-    echo "<input type='submit' value='Crear pedido'>";
-    echo "</form>";
+if ($existOrder) {
+    view_product_table();
+    view_cart_table();
 }
 
 View::end();
+
+
+/* --- Functions --- */
+function view_product_table()
+{
+    $db = new DB();
+    $result = $db->execute_query("SELECT * FROM bebidas;");
+
+    if ($result) {
+        $result->setFetchMode(PDO::FETCH_NAMED);
+        $first = true;
+
+        $tableHead["id"] = "ID";
+        $tableHead["marca"] = "Nombre del producto";
+        $tableHead["stock"] = "Stock";
+        $tableHead["PVP"] = "Precio";
+
+        foreach ($result as $drink) {
+            if ($first) {
+                echo <<<HEAD
+                <table class='tablaHorizontal'>
+                    <tr>
+                        <th>Marca</th>
+                        <th>Stock</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                    </tr>
+HEAD;
+                $first = false;
+            }
+            if ($drink['stock'] > 0) $stock = "Sí";
+            else $stock = "No";
+            $product = strtolower(str_replace(" ", "-", $drink['marca']));
+            echo <<<BODY
+            <tr>
+                <td><a href="../main/product.php?product={$product}">{$drink['marca']}</a></td>
+                <td>{$stock}</td>
+                <td>{$drink['PVP']}</td>
+                <td><input type=number min=0 max=100></td>
+            </tr>
+BODY;
+        }
+        echo '</table>';
+    }
+}
+
+function view_cart_table()
+{
+    $db = new DB();
+    $result = $db->execute_query("SELECT * FROM lineaspedido WHERE ");
+}

@@ -10,7 +10,7 @@ View::navigation();
 
 echo "<h2>Pedidos sin asignar</h2>";
 $db = new DB();
-$result = $db->execute_query("SELECT * FROM pedidos WHERE idrepartidor IS NULL;");
+$result = $db->execute_query("SELECT * FROM pedidos WHERE idrepartidor IS NULL AND horacreacion>?;", array(0));
 
 if ($result) {
     $result->setFetchMode(PDO::FETCH_NAMED);

@@ -9,6 +9,7 @@ class View{
                 <meta charset="UTF-8"> 
                 <title>$title</title>
                 <link rel="stylesheet" href="../estilos.css">
+                <script src="../javascript/jquery-3.2.0.js"></script>
             </head>
             
             <body>
