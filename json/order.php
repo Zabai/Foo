@@ -12,6 +12,8 @@ try {
             create_order($obj->town, $obj->address);
             $result->message = "Pedido creado correctamente";
             break;
+        case "update":
+            break;
         case "add":
             $lines = create_line($obj);
             $result->message = "Se añadieron los productos correctamente";
@@ -22,13 +24,12 @@ try {
             $result->message = "Se borraron los productos correctamente";
             break;
         case "finish":
-
+            finish_order();
             $result->message = "Pedido finalizado";
             break;
         default:
             break;
     }
-    //$result->message = "AJAX CORRECTO";
 } catch (Exception $e) {
     $result->message = $e->getMessage(); //En caso de error se envia la información de error al navegador
 }
@@ -55,7 +56,10 @@ function create_line($json)
         array(User::getLoggedUser()['id'], 0))->fetchColumn(0);
 
     for ($i = 0; $i < count($json->lines); $i++) {
-        if ($json->lines[$i]->amount == 0) continue;
+        if ($json->lines[$i]->amount == 0) {
+            $lines .= "0-";
+            continue;
+        }
 
         $lineID = exists_line($db, $orderID, $json->lines[$i]->id);
         if ($lineID == 0)
@@ -65,7 +69,7 @@ function create_line($json)
             $db->execute_query("UPDATE lineaspedido SET unidades=? WHERE id=?",
                 array($json->lines[$i]->amount, $lineID));
 
-        $lines .= strval(exists_line($db, $orderID, $json->lines[$i]->id)) . "-";
+        $lines .= exists_line($db, $orderID, $json->lines[$i]->id) . "-";
     }
     return $lines;
 }
@@ -87,7 +91,16 @@ function delete_line($id)
 function finish_order()
 {
     $db = new DB();
+    // FALTA POR HACER
+    //$orderPrice = calculate_order_price($db);
     $db->execute_query("UPDATE pedidos SET horacreacion=? WHERE idcliente=? AND horacreacion=?;",
         array(time(), User::getLoggedUser()['id'], 0));
+}
+
+function calculate_order_price($db)
+{
+    $result = $db->execute_query();
+
+    return;
 }
 ?>

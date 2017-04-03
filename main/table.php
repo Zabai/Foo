@@ -11,20 +11,43 @@ echo "<script src='../javascript/components.js'></script>";
 echo "<script src='../json/actions.js'></script>";
 
 $existOrder = exists_order();
-if ($existOrder) {
-    view_product_table();
-    echo "<button id='create_line' onclick='create_line()'>Añadir al pedido</button>";
-    view_cart_table();
-    echo "<button id='finish_order' onclick='finish_order()'>Terminar pedido</button>";
-} else {
-    echo "<button id='show_create_order' onclick='show_create_order()'>Empezar pedido</button>";
-}
+
+view_location_form();
+view_product_table();
+echo "<div id='cart' style='display:inline-block'>";
+echo "<button id='create_line' onclick='create_line()'>Añadir al pedido</button>";
+view_cart_table();
+echo "<button id='finish_order' onclick='finish_order()'>Terminar pedido</button>";
+echo "</div>";
+
+if ($existOrder) echo "<script>show_cart()</script>";
+else echo "<script>hide_cart()</script>";
 
 echo "<div class='clearfix'></div>";
 View::end();
 
 
 /* --- Functions --- */
+function view_location_form()
+{
+    $db = new DB();
+    $result = $db->execute_query("SELECT id FROM pedidos WHERE idcliente=? AND horacreacion=?;",
+        array(User::getLoggedUser()['id'], 0));
+
+    if (count($result->fetchAll()) > 0) $button = "<button id='create_order' onclick='update_order()'>Cambiar envío</button>";
+    else $button = "<button id='create_order' onclick='create_order()'>Crear pedidos</button>";
+
+    echo <<<LOCATION
+    <div class='panel'>
+        <p>Población</p>
+        <input id="town" type="text">
+        <p>Dirección</p>
+        <input id="address" type="text"><br><br>
+        {$button}
+    </div>
+LOCATION;
+}
+
 function view_product_table()
 {
     $db = new DB();

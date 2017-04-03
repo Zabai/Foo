@@ -42,3 +42,11 @@ function show_create_order() {
     $("#show_create_order").after(form);
     $("#show_create_order").remove();
 }
+
+function show_cart() {
+    $("#cart").show();
+}
+
+function hide_cart() {
+    $("#cart").hide();
+}

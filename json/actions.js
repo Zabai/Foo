@@ -3,10 +3,10 @@ function create_order() {
 
     ajax.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var res = JSON.parse(this.responseText);
-            alert(res.message);
+            $("#create_order").replaceWith("<button id='create_order' onclick='update_order()'>Cambiar envío</button>");
+            show_cart();
         }
-    }
+    };
 
     ajax.open("post", "../json/order.php", true);
     ajax.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -14,6 +14,19 @@ function create_order() {
     var town = $("#town").val();
     var address = $("#address").val();
     ajax.send(JSON.stringify({"op": "create", "town": town, "address": address}));
+}
+
+function update_order() {
+    var ajax = new XMLHttpRequest();
+
+    ajax.onreadystatechange = function () {
+
+    };
+
+    ajax.open("post", "../json/order.php", true);
+    ajax.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    ajax.send(JSON.stringify({"op": "update"}))
+
 }
 
 function create_line() {
@@ -111,9 +124,11 @@ function finish_order() {
     ajax.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             // Cambia interfaz
-
+            $("#create_order").replaceWith("<button id='create_order' onclick='create_order()'>Crear pedidos</button>");
+            $("#lineTable").find("tr:gt(0)").remove();
+            hide_cart();
         }
-    }
+    };
 
     ajax.open("post", "../json/order.php", true);
     ajax.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
