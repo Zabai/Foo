@@ -10,34 +10,42 @@ create_user();
 View::start('Distribuciones latosas');
 View::navigation();
 
+echo "<script src='../javascript/components.js'></script>";
+echo "<script src='../json/actions.js'></script>";
+
 echo <<<CREATE
 <div class="panel">
     <form id="login" method="post" action='../admin/create-user.php'>
         <p>Usuario:</p>
-        <input type="text" name="user"><br>
+        <p id='alert1' hidden>Necesita 4 caracteres</p>
+        <input id='nickname' type="text" name="user" onchange="tt()"><br>
         
         <p>Contraseña:</p>
         <input type="password" name="password"><br>
         
         <p>Nombre:</p>
-        <input type="text" name="name"><br>
+        <p id='alert2' hidden>Necesita 4 caracteres</p>
+        <input id='username' type="text" name="name"><br>
         
         <p>Tipo:</p>
-        <select name="type">
-                <option> Elige una opción </option>
-                <option value="1"," >Administrador</option>
-                <option value="3",>Repartidor</option>
+        <p id='alert3' hidden>Seleccione un rol</p>
+        <select id="rol" name="type" onchange="check_rol()">
+                <option value="0"> Elige una opción </option>
+                <option value="1">Administrador</option>
+                <option value="3">Repartidor</option>
                 <option value="2">Cliente</option>
-                </select>
+        </select>
         
-        <p>Población:</p>
-        <input type="text" name="town"><br>
-        
-        <p>Dirección:</p>
-        <input type="text" name="direction"><br><br>
-        
+		<div id="location">
+			<p>Población:</p>
+			<input type="text" name="town"><br>
+			
+			<p>Dirección:</p>
+			<input type="text" name="direction"><br><br>			
+		</div>
+		
         <div style="text-align: center">
-        <input type="submit" value="Crear Usuario">
+        <input type="button" onclick="check_form()" value="Crear Usuario">
         </div>
     </form>
 </div>
@@ -45,6 +53,7 @@ echo <<<CREATE
 <div class="clearfix"></div>
 CREATE;
 
+echo "<script>check_rol()</script>";
 View::end();
 
 function create_user()
