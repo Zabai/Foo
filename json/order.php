@@ -46,6 +46,13 @@ function create_order($town, $address)
       VALUES (?, ?, ?, ?);", array(User::getLoggedUser()['id'], 0, $town, $address));
 }
 
+function update_order($town, $address)
+{
+    $db = new DB();
+    $db->execute_query("UPDATE pedidos SET poblacionentrega=?, direccionentrega=? WHERE idcliente=? AND horacreacion=?;",
+        array($town, $address, User::getLoggedUser()['id'], 0));
+}
+
 function create_line($json)
 {
     $db = new DB();

@@ -60,8 +60,11 @@ function view_product_table()
         foreach ($result as $drink) {
             if ($first) {
                 echo <<<HEAD
-                <table class='tablaHorizontal'>
-                    <caption>Productos</caption>
+                <table class='tablaHorizontal' id="drinksTable">
+                    <caption>
+                        <p>Productos</p>
+                        <input type="text" id="search" onkeyup="filter_list()" placeholder="Buscar bebidas">
+                    </caption>
                     <tr>
                         <th>Marca</th>
                         <th>Stock</th>
