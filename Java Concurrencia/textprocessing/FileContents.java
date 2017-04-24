@@ -4,6 +4,7 @@ public class FileContents {
     private Queue<String> queue;
     private int registerCount = 0;
     private boolean closed = false;
+
     public FileContents(int maxFiles, int maxChars) {
         
     }
