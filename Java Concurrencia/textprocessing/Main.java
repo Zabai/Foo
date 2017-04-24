@@ -11,12 +11,37 @@ public class Main{
         Cree e inicie los hilos AQUÍ
         2 FileReader y 3 FileProcessor
         */
+        FileReader fr1 = new FileReader(fileNames, fileContents);
+        FileReader fr2 = new FileReader(fileNames, fileContents);
+
+        fr1.start();
+        fr2.start();
+
+        FileProcessor fp1 = new FileProcessor(fileContents, wordFrequencies);
+        FileProcessor fp2 = new FileProcessor(fileContents, wordFrequencies);
+        FileProcessor fp3 = new FileProcessor(fileContents, wordFrequencies);
+
+        fp1.start();
+        fp2.start();
+        fp3.start();
+
         Tools.fileLocator(fileNames, "datos");
         fileNames.noMoreNames();
+
         /*
         Esperar a que terminen los hilos creados
         */
-        
+        try {
+            fr1.join();
+            fr2.join();
+
+            fp1.join();
+            fp2.join();
+            fp3.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         for( String palabra : Tools.wordSelector(wordFrequencies.getFrequencies())) {
             System.out.println(palabra);
         }

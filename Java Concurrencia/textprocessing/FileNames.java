@@ -14,7 +14,18 @@ public class FileNames {
         if(!blocked) queue.add(fileName);
     }
     public String getName() {
-        return "";
+        if(blocked) return null;
+
+        String fileName = queue.poll();
+        if(fileName != null) return fileName;
+        else{
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return queue.poll();
+        }
     }
 
     public void noMoreNames() {

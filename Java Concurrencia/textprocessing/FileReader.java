@@ -1,5 +1,5 @@
 package textprocessing;
-public class FileReader {
+public class FileReader extends Thread {
     public FileReader(FileNames fn, FileContents fc){
     }
 }
