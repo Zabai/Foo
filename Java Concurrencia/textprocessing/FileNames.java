@@ -1,23 +1,42 @@
 package textprocessing;
+
 import java.util.LinkedList;
 import java.util.Queue;
-public class FileNames {
+
+class FileNames {
     private Queue<String> queue;
-    private boolean blocked;
+    private boolean blocked = false;
 
-    public FileNames() {
+    FileNames() {
         queue = new LinkedList<>();
-        blocked = false;
     }
 
-    public void addName(String fileName) {
-        if(!blocked) queue.add(fileName);
-    }
-    public String getName() {
-        return "";
+    synchronized void addName(String fileName) {
+        if (blocked) return;
+        queue.add(fileName);
+        System.out.println("+" + fileName);
+        notifyAll();
     }
 
-    public void noMoreNames() {
+    synchronized String getName() {
+        String fileName = queue.poll();
+        if (fileName != null) {
+            System.out.println("-" + fileName);
+            return fileName;
+        }
+        else{
+            if (blocked) return null;
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return getName();
+        }
+    }
+
+    synchronized void noMoreNames() {
+        System.out.println("--- No More Names ---");
         blocked = true;
     }
 }

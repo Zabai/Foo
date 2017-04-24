@@ -1,0 +1,2 @@
+Esto son datos con múltiples símbolos, para probar que las comas
+y saltos de línea las separa bien sin interferir con los datos.
