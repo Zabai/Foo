@@ -42,7 +42,6 @@
     )
 )
 
-#(Hacerlo con un loop en un solo metodo)
 (define (invierte lst)
     (invierteAux lst '())
 )
@@ -67,7 +66,16 @@
 )
 
 (define (repetidos lst)
-    #f
+    (repetidosAux lst '())
+)
+(define (repetidosAux lst result)
+    (if (null? lst)
+        (reverse result)
+        (if (member (car lst) (cdr lst))
+            (repetidosAux (cdr lst) result)
+            (repetidosAux (cdr lst) (cons (car lst) result))
+        )
+    )
 )
 
 (display "(fibo 7): ")
@@ -98,5 +106,6 @@
 (display (elimina 3 '(1 2 3 4 5)))
 (newline)
 
-#(repetidos '(1 2 3 3 4 5 5))
+(display "(repetidos '(1 2 3 3 4 5 5 2)): ")
+(display (repetidos '(1 2 3 3 4 5 5 2)))
 (newline)
