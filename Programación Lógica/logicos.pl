@@ -28,18 +28,16 @@ invierteAux([], V, V).
 invierteAux([C|Rl], V, R):-  invierteAux(Rl, [C|V], R).
 
 elimina([], _, []) :- !.
-elimina([H|T], V, Result) :- H=:=V, elimina(T, V, Result), !.
-elimina([H|T], V, [H|Result]) :- elimina(T, V, Result).
+elimina([C|R], V, Result) :- C=:=V, elimina(R, V, Result), !.
+elimina([C|R], V, [C|Result]) :- elimina(R, V, Result).
 
 repetidos([],[]).
-repetidos([H|T],[H|Out]) :-
-    not(esta(H,T)),
-    repetidos(T,Out).
-repetidos([H|T],Out) :-
-    esta(H,T),
-    repetidos(T,Out), !.
+repetidos([C|R],[C|Out]) :-
+    not(esta(C,R)),
+    repetidos(R,Out).
+repetidos([C|R],Out) :-
+    esta(C,R),
+    repetidos(R,Out), !.
     
 esta(X,[X|_]).
 esta(X,[_|T]) :- esta(X,T).
-
-not(A) :- \+ call(A).
